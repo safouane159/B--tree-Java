@@ -1,13 +1,17 @@
 package fr.miage.fsgbd;
 
 
+import fr.miage.fsgbd.NameGenerator;
+
 public class Main {
     public static void main(String args[]) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 //On crée une nouvelle instance de notre JDialog
-                GUI fenetre = new GUI();
-                fenetre.setVisible(true);
+              GUI fenetre = new GUI();
+               fenetre.setVisible(true);
+
+
             }
         });
 
