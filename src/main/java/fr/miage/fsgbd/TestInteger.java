@@ -1,4 +1,4 @@
-package fr.miage.fsgbd;
+package main.java.fr.miage.fsgbd;
 
 public class TestInteger implements Executable<Integer>, java.io.Serializable {
     public boolean execute(Integer int1, Integer int2) {

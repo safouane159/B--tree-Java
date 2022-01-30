@@ -1,4 +1,4 @@
-package fr.miage.fsgbd;
+package main.java.fr.miage.fsgbd;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -41,6 +41,8 @@ public class BTreePlus<Type> implements java.io.Serializable {
 
 
     public boolean addValeur(Type valeur) {
+    	NameGenerator r = new NameGenerator();
+    	
         System.out.println("Ajout de la valeur : " + valeur.toString());
         if (racine.contient(valeur) == null) {
             Noeud<Type> newRacine = racine.addValeur(valeur);

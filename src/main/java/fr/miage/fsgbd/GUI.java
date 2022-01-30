@@ -1,4 +1,4 @@
-package fr.miage.fsgbd;
+package main.java.fr.miage.fsgbd;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;

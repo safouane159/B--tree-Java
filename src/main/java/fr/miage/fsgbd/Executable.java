@@ -1,4 +1,4 @@
-package fr.miage.fsgbd;
+package main.java.fr.miage.fsgbd;
 
 public interface Executable<T> extends java.io.Serializable
 {

@@ -1,4 +1,4 @@
-package fr.miage.fsgbd;
+package main.java.fr.miage.fsgbd;
 
 public class TestString implements Executable<String> {
 	public boolean execute(String str1, String str2) {

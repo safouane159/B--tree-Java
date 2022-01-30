@@ -1,4 +1,4 @@
-package fr.miage.fsgbd;
+package main.java.fr.miage.fsgbd;
 
 import java.util.Random;
 
@@ -19796,6 +19796,16 @@ public class NameGenerator {
                 "Zuzana"
         };
         return lastNames[new Random().nextInt(lastNames.length)];
+    }
+
+
+    public long NUmeroSocial() {
+    	
+    	
+    	long valeur = (long) (Math.random() * 10000000000000L);
+    	
+    	return valeur;
+    	
     }
 }
 
