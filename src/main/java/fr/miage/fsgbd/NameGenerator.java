@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class NameGenerator {
 
+
     public String nameGenerator() {
         String names[] = {"Omar", "Safouane", "Fatoumata", "Khadidiatou", "Aaren",
                 "Aarika"
@@ -19797,6 +19798,28 @@ public class NameGenerator {
         };
         return lastNames[new Random().nextInt(lastNames.length)];
     }
+
+    public long nssGenerator(){
+        Random random1 = new Random();
+    long nss = random1.nextLong(0 + 9) + 0;
+        for (int i =0 ; i<14; i++){
+            long min = 0;
+            long max = 9;
+
+            Random random = new Random();
+
+            long value = random.nextLong(max + min) + min;
+           nss = Long.valueOf(String.valueOf(nss) + String.valueOf(value));
+
+
+        }
+        long value =Long.parseLong(String.valueOf(nss));
+        System.out.println(" valeur de nss : "+value);
+
+        return value;
+    };
+
 }
+
 
 

@@ -12,16 +12,35 @@ public class Main {
                 //On crée une nouvelle instance de notre JDialog
               //GUI fenetre = new GUI();
               // fenetre.setVisible(true);
-               SGBDconnect connect =new SGBDconnect();
+                SGBDconnect Add = new SGBDconnect();
+                NameGenerator connect = new NameGenerator();
+
+               /* try {
+                    Add.createTable(Add.connectToDatabase());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }*/
+               for (int i = 0; i < 10; i++)
+                {
                 try {
-                    connect.initTable();
+                Add.addListTest(connect.nssGenerator(),i);
+                    Add.addRow(Add.connectToDatabase(),connect.nssGenerator(), connect.nameGenerator(), connect.lastNameGenerator());
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-
-
+                };
+                try {
+                    Add.testSequentielle(Add.connectToDatabase(),Add.getListTest());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-        });
+
+
+
+
+
+
 
 		/*
 		TestInteger testInt = new TestInteger();
@@ -45,5 +64,7 @@ public class Main {
 		Noeud<String> noeud1 = new Noeud<String>(2, 5,test, null);
 		Noeud<String> noeud2 = new Noeud<String>(2, 5,test, null);
 		*/
-    }
-}
+    });
+};
+
+};
