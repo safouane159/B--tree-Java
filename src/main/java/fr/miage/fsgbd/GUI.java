@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class GUI extends JFrame implements ActionListener {
     TestInteger testInt = new TestInteger();
     BTreePlus<Integer> bInt;
-    private JButton buttonClean, buttonRemove, buttonLoad, buttonSave, buttonAddMany, buttonAddItem, buttonRefresh;
+    private JButton buttonClean, buttonRemove, buttonLoad, buttonSave, buttonAddMany, buttonAddItem, buttonRefresh,buttonTest;
     private JTextField txtNbreItem, txtNbreSpecificItem, txtU, txtFile, removeSpecific;
     private final JTree tree = new JTree();
 
@@ -24,6 +24,13 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
+    	 if (e.getSource() == buttonTest) {
+    		 
+    		 bInt = new BTreePlus<Integer>(Integer.parseInt(txtU.getText()), testInt);
+    		 bInt.affichePointeur();
+    		 
+    	 }else { 
+    	
         if (e.getSource() == buttonLoad || e.getSource() == buttonClean || e.getSource() == buttonSave || e.getSource() == buttonRefresh) {
             if (e.getSource() == buttonLoad) {
                 BDeserializer<Integer> load = new BDeserializer<Integer>();
@@ -46,10 +53,19 @@ public class GUI extends JFrame implements ActionListener {
                 bInt = new BTreePlus<Integer>(Integer.parseInt(txtU.getText()), testInt);
 
             if (e.getSource() == buttonAddMany) {
-                for (int i = 0; i < Integer.parseInt(txtNbreItem.getText()); i++) {
-                    int valeur = (int) (Math.random() * 10 * Integer.parseInt(txtNbreItem.getText()));
-                    boolean done = bInt.addValeur(valeur);
-
+            	
+                for (int i = 1; i < 10000; i++) {
+                	
+                	NameGenerator r = new NameGenerator();
+                	
+                	int N_etudiant = r.Numero_etudiant();
+                	String Nom_etudiant = r.nameGenerator();
+                	String Prenom_etudiant = r.lastNameGenerator();
+                	
+                	
+                    boolean done = bInt.addValeur(N_etudiant);
+                    BTreePlus.addToPointeur(N_etudiant, i);
+                    BTreePlus.addRecord(N_etudiant,Nom_etudiant,Prenom_etudiant,i);
 					/*
 					  On pourrait forcer l'ajout mais on risque alors de tomber dans une boucle infinie sans "r?gle" faisant sens pour en sortir
 
@@ -73,7 +89,7 @@ public class GUI extends JFrame implements ActionListener {
             } else if (e.getSource() == buttonRemove) {
                 bInt.removeValeur(Integer.parseInt(removeSpecific.getText()));
             }
-        }
+        }}
 
         tree.setModel(new DefaultTreeModel(bInt.bArbreToJTree()));
         for (int i = 0; i < tree.getRowCount(); i++)
@@ -195,7 +211,12 @@ public class GUI extends JFrame implements ActionListener {
         c.weightx = 0.5;
         c.gridwidth = 1;
         pane1.add(buttonSave, c);
-
+        buttonTest = new JButton("Check list ");
+        c.gridx = 2;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.gridwidth = 2;
+        pane1.add(buttonTest, c);
         buttonLoad = new JButton("Charger l'arbre");
         c.gridx = 3;
         c.gridy = 5;
@@ -229,7 +250,7 @@ public class GUI extends JFrame implements ActionListener {
 
         tree.setModel(new DefaultTreeModel(null));
         tree.updateUI();
-
+        buttonTest.addActionListener(this);
         txtNbreItem.addActionListener(this);
         buttonAddItem.addActionListener(this);
         buttonAddMany.addActionListener(this);

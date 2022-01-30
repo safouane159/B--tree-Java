@@ -9,6 +9,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
  */
 public class BTreePlus<Type> implements java.io.Serializable {
     private Noeud<Type> racine;
+ 
+ static Record[] records= new Record[10000];
+ static int[] pointeur= new int[10000];
+
+
 
     public BTreePlus(int u, Executable e) {
         racine = new Noeud<Type>(u, e, null);
@@ -39,11 +44,22 @@ public class BTreePlus<Type> implements java.io.Serializable {
         return racine2;
     }
 
+    public static void addToPointeur(int key, int valeur) {
+    	
+    	pointeur[key] = valeur;
+        
+    }
+    public static void affichePointeur() {
+    	for (int i = 0; i < 200; i++) {
+    	System.out.println("value of "+i +" is : "+  pointeur[i]);
+    	}
+    	
+    	
+    }
 
     public boolean addValeur(Type valeur) {
-    	NameGenerator r = new NameGenerator();
     	
-        System.out.println("Ajout de la valeur : " + valeur.toString());
+    
         if (racine.contient(valeur) == null) {
             Noeud<Type> newRacine = racine.addValeur(valeur);
             if (racine != newRacine)
@@ -52,7 +68,14 @@ public class BTreePlus<Type> implements java.io.Serializable {
         }
         return false;
     }
-
+    
+    public static void addRecord(int N_etudiant,String Nom_etudiant,String Prenom_etudiant,int inc) {
+    
+    	records[inc] = new Record(N_etudiant,Nom_etudiant,Prenom_etudiant);
+    	
+    	
+    	
+    }
 
     public void removeValeur(Type valeur) {
         System.out.println("Retrait de la valeur : " + valeur.toString());

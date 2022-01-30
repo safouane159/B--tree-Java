@@ -19799,10 +19799,10 @@ public class NameGenerator {
     }
 
 
-    public long NUmeroSocial() {
+    public int Numero_etudiant() {
     	
     	
-    	long valeur = (long) (Math.random() * 10000000000000L);
+    	int valeur = (int) (Math.random() * 10000);
     	
     	return valeur;
     	
