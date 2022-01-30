@@ -1,8 +1,11 @@
 package main.java.fr.miage.fsgbd;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class NameGenerator {
+	
+	
 
     public String nameGenerator() {
         String names[] = {"Omar", "Safouane", "Fatoumata", "Khadidiatou", "Aaren",
@@ -19798,14 +19801,37 @@ public class NameGenerator {
         return lastNames[new Random().nextInt(lastNames.length)];
     }
 
-
+    static ArrayList<Integer> exist= new ArrayList<Integer>();
+    
     public int Numero_etudiant() {
+    	int valeur ;
+    	
+    	do {
+    	 	 valeur = (int) (Math.random() * 10000);
+    	 	
+    	}while(contains(exist,valeur) == true );
+   
     	
     	
-    	int valeur = (int) (Math.random() * 10000);
+    	exist.add(valeur);
+    	
     	
     	return valeur;
     	
+    }
+    public static boolean contains(final ArrayList<Integer> array, final int v) {
+
+        boolean result = false;
+
+        for(int i : array){
+            if(i == v){
+                result = true;
+                System.out.print("haTrue");
+                break;
+            }
+        }
+
+        return result;
     }
 }
 
