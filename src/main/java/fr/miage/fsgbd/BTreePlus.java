@@ -2,6 +2,8 @@ package main.java.fr.miage.fsgbd;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import fr.miage.fsgbd.KeyValue;
+
 
 /**
  * @author Galli Gregory, Mopolo Moke Gabriel
@@ -34,11 +36,11 @@ public class BTreePlus<Type> implements java.io.Serializable {
 
     private DefaultMutableTreeNode bArbreToJTree(Noeud<Type> root) {
         StringBuilder txt = new StringBuilder();
-        for (Type key : root.keys)
+        for (KeyValue<Type, ValueType> key : root.keys)
             txt.append(key.toString()).append(" ");
 
         DefaultMutableTreeNode racine2 = new DefaultMutableTreeNode(txt.toString(), true);
-        for (Noeud<Type> fil : root.fils)
+        for (Noeud<Type,ValueType > fil : root.fils)
             racine2.add(bArbreToJTree(fil));
 
         return racine2;
