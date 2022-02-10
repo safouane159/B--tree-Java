@@ -2,15 +2,14 @@ package main.java.fr.miage.fsgbd;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import fr.miage.fsgbd.KeyValue;
 
 
 /**
  * @author Galli Gregory, Mopolo Moke Gabriel
- * @param <Type>
+ * @param <Type, ValueType>
  */
-public class BTreePlus<Type> implements java.io.Serializable {
-    private Noeud<Type> racine;
+public class BTreePlus<Type, ValueType>  implements java.io.Serializable {
+    private Noeud<Type, ValueType>  racine;
  
  static Record[] records= new Record[10000];
  static int[] pointeur= new int[10000];
@@ -18,7 +17,7 @@ public class BTreePlus<Type> implements java.io.Serializable {
 
 
     public BTreePlus(int u, Executable e) {
-        racine = new Noeud<Type>(u, e, null);
+        racine = new Noeud<Type, ValueType> (u, e, null);
     }
 
     public void afficheArbre() {
@@ -34,9 +33,9 @@ public class BTreePlus<Type> implements java.io.Serializable {
         return bArbreToJTree(racine);
     }
 
-    private DefaultMutableTreeNode bArbreToJTree(Noeud<Type> root) {
+    private DefaultMutableTreeNode bArbreToJTree(Noeud<Type, ValueType> root) {
         StringBuilder txt = new StringBuilder();
-        for (KeyValue<Type, ValueType> key : root.keys)
+        for (keyPointer<Type, ValueType> key : root.keys)
             txt.append(key.toString()).append(" ");
 
         DefaultMutableTreeNode racine2 = new DefaultMutableTreeNode(txt.toString(), true);
@@ -63,7 +62,7 @@ public class BTreePlus<Type> implements java.io.Serializable {
     	
     
         if (racine.contient(valeur) == null) {
-            Noeud<Type> newRacine = racine.addValeur(valeur);
+            Noeud<Type, ValueType> newRacine = racine.addValeur(valeur);
             if (racine != newRacine)
                 racine = newRacine;
             return true;
@@ -82,7 +81,7 @@ public class BTreePlus<Type> implements java.io.Serializable {
     public void removeValeur(Type valeur) {
         System.out.println("Retrait de la valeur : " + valeur.toString());
         if (racine.contient(valeur) != null) {
-            Noeud<Type> newRacine = racine.removeValeur(valeur, false);
+            Noeud<Type, ValueType> newRacine = racine.removeValeur(valeur, false);
             if (racine != newRacine)
                 racine = newRacine;
         }
