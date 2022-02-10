@@ -1,6 +1,10 @@
 package main.java.fr.miage.fsgbd;
 
+import java.util.Stack;
+
 import javax.swing.tree.DefaultMutableTreeNode;
+
+
 
 
 
@@ -58,10 +62,10 @@ public class BTreePlus<Type, ValueType>  implements java.io.Serializable {
     	
     }
 
-    public boolean addValeur(Type valeur) {
+    public boolean addValeur(keyPointer<Type, ValueType> valeur) {
     	
     
-        if (racine.contient(valeur) == null) {
+        if (racine.contient(valeur.getKey()) == null) {
             Noeud<Type, ValueType> newRacine = racine.addValeur(valeur);
             if (racine != newRacine)
                 racine = newRacine;
@@ -86,4 +90,58 @@ public class BTreePlus<Type, ValueType>  implements java.io.Serializable {
                 racine = newRacine;
         }
     }
+    public keyPointer<Type, ValueType> rechercheArbre(Type valeur) {
+        Noeud<Type, ValueType> noeud = this.racine.contient(valeur);
+        if (noeud != null) {
+            for (keyPointer<Type, ValueType> keyvalue : noeud.keys) {
+                if (keyvalue.getKey().equals(valeur)) return keyvalue;
+            }
+        }
+        return null;
+    }
+
+    public keyPointer<Type, ValueType> rechercheArbreHomemade(Type valeur){
+        Noeud<Type, ValueType> noeud = this.racine;
+        keyPointer<Type, ValueType> result = null;
+
+        while(result == null){
+            int index = 0;
+            for(keyPointer<Type, ValueType> kv : noeud.keys){
+                if(valeur.equals(kv.getKey())){
+                    result = kv;
+                    break;
+                }
+
+                if(noeud.compare(valeur, kv.getKey())) break;
+                else index++;
+            }
+
+            if(noeud.fils.size() == 0 || noeud.fils.size() < index) break;
+            else noeud = noeud.fils.get(index);
+        }
+
+        return result;
+    }
+
+    public keyPointer<Type, ValueType> rechercheSequentielle(Type valeur) {
+        Stack<Noeud<Type, ValueType>> stack = new Stack();
+
+        Noeud<Type, ValueType> noeud = this.racine;
+
+        do {
+            for (keyPointer<Type, ValueType> keyvalue : noeud.keys) {
+                if (keyvalue.getKey().equals(valeur)) return keyvalue;
+            }
+
+            if (noeud.fils != null && noeud.fils.size() > 0) {
+                if (stack.addAll(noeud.fils)) /*System.out.println("Add to stack")*/;
+                //else System.out.println("Error couldnt add to the stack");
+            }
+
+//            System.out.println("Pop stack");
+            noeud = stack.pop();
+        } while (!stack.empty());
+        return null;
+    }
 }
+

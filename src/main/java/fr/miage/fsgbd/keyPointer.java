@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class keyPointer <KeyType, ValueType>{
 	
-    public keyPointer(ValueType value, KeyType key) {
+    public keyPointer(KeyType key, ValueType value) {
 		super();
 		this.value = value;
 		this.key = key;

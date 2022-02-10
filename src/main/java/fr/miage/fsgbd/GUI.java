@@ -3,9 +3,16 @@ package main.java.fr.miage.fsgbd;
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 
+
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -13,9 +20,10 @@ import java.util.ArrayList;
  */
 public class GUI extends JFrame implements ActionListener {
     TestInteger testInt = new TestInteger();
-    BTreePlus<Integer> bInt;
-    private JButton buttonClean, buttonRemove, buttonLoad, buttonSave, buttonAddMany, buttonAddItem, buttonRefresh,buttonTest;
-    private JTextField txtNbreItem, txtNbreSpecificItem, txtU, txtFile, removeSpecific;
+    private JFileChooser fileChooser;
+    BTreePlus<Integer,etudiant> bInt;
+    private JButton loadfile,btnFileDial,buttonClean, buttonRemove, buttonLoad, buttonSave, buttonAddMany, buttonAddItem, buttonRefresh,buttonTest;
+    private JTextField pathF,txtNbreItem, txtNbreSpecificItem, txtU, txtFile, removeSpecific;
     private final JTree tree = new JTree();
 
     public GUI() {
@@ -24,16 +32,11 @@ public class GUI extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-    	 if (e.getSource() == buttonTest) {
-    		 
-    		 bInt = new BTreePlus<Integer>(Integer.parseInt(txtU.getText()), testInt);
-    		 bInt.affichePointeur();
-    		 
-    	 }else { 
+    	
     	
         if (e.getSource() == buttonLoad || e.getSource() == buttonClean || e.getSource() == buttonSave || e.getSource() == buttonRefresh) {
             if (e.getSource() == buttonLoad) {
-                BDeserializer<Integer> load = new BDeserializer<Integer>();
+                BDeserializer<Integer,etudiant> load = new BDeserializer<Integer,etudiant>();
                 bInt = load.getArbre(txtFile.getText());
                 if (bInt == null)
                     System.out.println("Echec du chargement.");
@@ -42,20 +45,24 @@ public class GUI extends JFrame implements ActionListener {
                 if (Integer.parseInt(txtU.getText()) < 2)
                     System.out.println("Impossible de cr?er un arbre dont le nombre de cl?s est inf?rieur ? 2.");
                 else
-                    bInt = new BTreePlus<Integer>(Integer.parseInt(txtU.getText()), testInt);
+                    bInt = new BTreePlus<Integer,etudiant>(Integer.parseInt(txtU.getText()), testInt);
             } else if (e.getSource() == buttonSave) {
-                BSerializer<Integer> save = new BSerializer<Integer>(bInt, txtFile.getText());
+                BSerializer<Integer,etudiant> save = new BSerializer<Integer,etudiant>(bInt, txtFile.getText());
             }else if (e.getSource() == buttonRefresh) {
                 tree.updateUI();
             }
         } else {
             if (bInt == null)
-                bInt = new BTreePlus<Integer>(Integer.parseInt(txtU.getText()), testInt);
+                bInt = new BTreePlus<Integer,etudiant>(Integer.parseInt(txtU.getText()), testInt);
 
             if (e.getSource() == buttonAddMany) {
             	
-                for (int i = 1; i < 10000; i++) {
-                	
+                
+                	 for (int j = 0; j < Integer.parseInt(txtNbreItem.getText()); j++) {
+                         int valeur = (int) (Math.random() * 10 * Integer.parseInt(txtNbreItem.getText()));
+                         boolean done = bInt.addValeur(new keyPointer<Integer, etudiant>(valeur, new etudiant()));
+/*
+                	for (int i = 1; i < 10000; i++) {
                 	NameGenerator r = new NameGenerator();
                 	
                 	int N_etudiant = r.Numero_etudiant();
@@ -66,7 +73,7 @@ public class GUI extends JFrame implements ActionListener {
                     boolean done = bInt.addValeur(N_etudiant);
                     BTreePlus.addToPointeur(N_etudiant, i);
                     BTreePlus.addRecord(N_etudiant,Nom_etudiant,Prenom_etudiant,i);
-					/*
+					
 					  On pourrait forcer l'ajout mais on risque alors de tomber dans une boucle infinie sans "r?gle" faisant sens pour en sortir
 
 					while (!done)
@@ -78,8 +85,8 @@ public class GUI extends JFrame implements ActionListener {
                 }
 
             } else if (e.getSource() == buttonAddItem) {
-                if (!bInt.addValeur(Integer.parseInt(txtNbreSpecificItem.getText())))
-                    System.out.println("Tentative d'ajout d'une valeur existante : " + txtNbreSpecificItem.getText());
+            	 if (!bInt.addValeur(new keyPointer<Integer, etudiant>(Integer.parseInt(txtNbreSpecificItem.getText()), new etudiant())))
+                     ;   System.out.println("Tentative d'ajout d'une valeur existante : " + txtNbreSpecificItem.getText());
                 txtNbreSpecificItem.setText(
                         String.valueOf(
                                 Integer.parseInt(txtNbreSpecificItem.getText()) + 2
@@ -88,15 +95,52 @@ public class GUI extends JFrame implements ActionListener {
 
             } else if (e.getSource() == buttonRemove) {
                 bInt.removeValeur(Integer.parseInt(removeSpecific.getText()));
-            }
-        }}
+            }else if (e.getSource() == loadfile) {
+                System.out.println("Load the data from the file");
+                bInt = new BTreePlus<>(Integer.parseInt(txtU.getText()), testInt);
+                BufferedReader reader;
+                try {
+                    reader = new BufferedReader(new FileReader(new File(pathF.getText())));
+                    String line = reader.readLine();
+                    int indexRow = 0;
+                    while (line != "" && line != null) {
+                        String[] tokens = line.split(";");
+                        if (indexRow > 0) { // Ignore header
+                            if (tokens.length == 5) {
+                                etudiant identity = new etudiant(tokens[4], tokens[1], tokens[2], Integer.parseInt(tokens[3]));
+                                bInt.addValeur(new keyPointer<Integer, etudiant>(Integer.parseInt(tokens[0]), identity));
+                            }
+                        }
+                        try {
+                            line = reader.readLine();
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                        indexRow++;
+                    }
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
 
+
+            }
+        }
+        if (e.getSource() == btnFileDial) {
+            System.out.println("Open dialog to choose a file");
+            int returnVal = fileChooser.showOpenDialog(GUI.this);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                pathF.setText(file.getAbsolutePath());
+            }
+        } else {
         tree.setModel(new DefaultTreeModel(bInt.bArbreToJTree()));
         for (int i = 0; i < tree.getRowCount(); i++)
             tree.expandRow(i);
 
         tree.updateUI();
-    }
+    } }
 
     private void build() {
         setTitle("Indexation - B Arbre");
@@ -244,7 +288,28 @@ public class GUI extends JFrame implements ActionListener {
         c.gridwidth = 4;   //2 columns wide
         c.gridx = 0;
         c.gridy = 8;
-
+      
+        
+        btnFileDial = new JButton("Open dialog to choose a file");
+        c.gridx = 1;
+        c.gridy = 8;
+        c.weightx = 1;
+        c.gridwidth = 1;
+        pane1.add(btnFileDial, c);
+        loadfile = new JButton("Load data file");
+        c.gridx = 2;
+        c.gridy = 8;
+        c.weightx = 1;
+        c.gridwidth = 2;
+        pane1.add(loadfile, c);
+        pathF = new JTextField("", 7);
+        c.gridx = 0;
+        c.gridy = 8;
+        c.weightx = 1;
+        c.gridwidth = 1;
+        pane1.add(pathF, c);
+        fileChooser = new JFileChooser();
+        
         JScrollPane scrollPane = new JScrollPane(tree);
         pane1.add(scrollPane, c);
 
@@ -259,7 +324,8 @@ public class GUI extends JFrame implements ActionListener {
         buttonRemove.addActionListener(this);
         buttonClean.addActionListener(this);
         buttonRefresh.addActionListener(this);
-
+        loadfile.addActionListener(this);
+        btnFileDial.addActionListener(this);
         return pane1;
     }
 }
