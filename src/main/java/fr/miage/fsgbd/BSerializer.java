@@ -2,9 +2,9 @@ package main.java.fr.miage.fsgbd;
 
 import java.io.*;
 	
-	public class BSerializer<Type>
+	public class BSerializer<Type, ValueType>
 	{	   
-	  public BSerializer (BTreePlus<Type> arbre, String path) 
+	  public BSerializer (BTreePlus<Type, ValueType> arbre, String path) 
 	  {	    
 	    try {
 	      FileOutputStream fichier = new FileOutputStream(path);
