@@ -19,7 +19,8 @@ public class Noeud<Type> implements java.io.Serializable {
 
     // Noeud Parent du noeud courant
     private Noeud<Type> parent;
-
+    private Noeud<Type> precedent;
+    private Noeud<Type> suivant;
     // Classe interfa�ant "Executable" et donc contenant une proc�dure de comparaison de <Type>
     private Executable compar;
 
