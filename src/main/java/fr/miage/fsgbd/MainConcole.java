@@ -3,7 +3,7 @@ package main.java.fr.miage.fsgbd;
 
 import java.io.*;
 
-public class MainNoGUI {
+public class MainConcole {
 
     public static void main(String args[]) {
         BufferedReader reader = null;
