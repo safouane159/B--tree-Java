@@ -1,0 +1,4 @@
+
+Lien Git : https://github.com/safouane159/B--tree-Java
+
+Important : afin de faire fonctionner le projet correctement, il faut modifier le fichier "MainConcole" line 13, qui corresponde au chemin de fichier qui contient les informations des étudiants
